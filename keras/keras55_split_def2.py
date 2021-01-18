@@ -1,80 +1,66 @@
 import numpy as np
-dataset2 = np.array([[1,2,3,4,5,6,7,8,9,10],
+
+"""
+split_xy 함수
+다:다, 1:1, 범용 하지만 출력 값을 일일히 확인해야함.
+"""
+
+def split_xy(seq,x_size,x_col_start, x_col_end ,y_size,y_col_start,y_col_end):
+    print(range(len(seq)-x_size-1))                             
+    print(seq.shape)                                            
+    x=[]
+    y=[]
+    for i in range(len(seq)-x_size-y_size+1):                          
+        xi = seq[i:(i+x_size),x_col_start-1:x_col_end].astype('float32')   
+        yi = seq[(i+x_size):(i+x_size+y_size),y_col_start-1:y_col_end].astype('float32')       
+        x.append(np.array(xi))          
+        y.append(np.array(yi))          
+    print(np.array(x).shape)
+    print(np.array(y).shape)
+    return np.array(x),  np.array(y)
+
+# # 불러오기 ===============================================================================================
+
+# datasets = pd.read_csv('../data/csv/sam_dc.csv',index_col=0 ,encoding='ms949')
+
+# len(Seq) : 데이터 셋의 행의 길이 현재 행의 길이는 1085임
+# x_size : 몇 일치 분량 일지         현재 전날 5일 분량으로 다음날을 확인하고자 함.
+# x_col : 몇 일치 분량의 열인지      삼성 5, 코스닥 6 컬럼의 5일치를 확인하고자 함.
+# y_size : 몇 일치 분량 일지         현재 전날 5일 분량으로 다음날을 확인하고자 함.
+# x_col : 몇 일치 분량의 열인지      삼성 5, 코스닥 6 컬럼의 5일치를 확인하고자 함.
+#=========================================================================================================
+
+dataset = np.array([[1,2,3,4,5,6,7,8,9,10],
                   [11,12,13,14,15,16,17,18,19,20],
-                  [21,22,23,24,25,26,27,28,29,30]])
+                  [21,22,23,24,25,26,27,28,29,30],
+                  [31,32,33,34,35,36,37,38,39,40],
+                  [41,42,43,44,45,46,47,48,49,50]])
+                  
+dataset = dataset.transpose()
+"""(10,5)
+[[ 1 11 21 31 41]
+ [ 2 12 22 32 42]
+ [ 3 13 23 33 43]
+ [ 4 14 24 34 44]
+ [ 5 15 25 35 45]
+ [ 6 16 26 36 46]
+ [ 7 17 27 37 47]
+ [ 8 18 28 38 48]
+ [ 9 19 29 39 49]
+ [10 20 30 40 50]]
+"""
+print(dataset)
+# 입력은 여기에 =========
+x_size = 3
+x_col_start = 3
+x_col_end = 5
+y_size = 1
+y_col_start = 1
+y_col_end = 2
+# 입력은 여기 =========
 
-# print('dataset2.shape :', dataset2.shape)
-
-dataset2 = np.transpose(dataset2)
-# print(dataset2)
-print('dataset2.shape :', dataset2.shape)
-
-def split_xy3(dataset2, x_row, x_col, y_row, y_col):
-    x,y = list(), list()
-    for i in range(len(dataset2)):
-        x_start_number = i
-        x_end_number = i + x_row
-        y_end_number = x_end_number + y_row -1
-        
-        if y_end_number > len(dataset2):
-            break
-        tmp_x = dataset2[i:x_end_number, : x_col]
-        tmp_y = dataset2[x_end_number -1 : y_end_number, x_col :]
-        x.append(tmp_x)
-        y.append(tmp_y)
-    return np.array(x), np.array(y)
-
-x, y = split_xy3(dataset2,3,2,4,1)
-print(x, '\n', y)
-print(x.shape)
-print(y.shape)
-
-
-'''
-dataset2.shape : (10, 3)
-[[[ 1 11]
-  [ 2 12]
-  [ 3 13]]
-
- [[ 2 12]
-  [ 3 13]
-  [ 4 14]]
-
- [[ 3 13]
-  [ 4 14]
-  [ 5 15]]
-
- [[ 4 14]
-  [ 5 15]
-  [ 6 16]]
-
- [[ 5 15]
-  [ 6 16]
-  [ 7 17]]]
- [[[23]
-  [24]
-  [25]
-  [26]]
-
- [[24]
-  [25]
-  [26]
-  [27]]
-
- [[25]
-  [26]
-  [27]
-  [28]]
-
- [[26]
-  [27]
-  [28]
-  [29]]
-
- [[27]
-  [28]
-  [29]
-  [30]]]
-(5, 3, 2)
-(5, 4, 1)
-'''
+# x y데이터 생성, 스플릿
+xset, yset = split_xy(dataset,x_size,x_col_start, x_col_end ,y_size,y_col_start,y_col_end)
+# 입력 데이터의 길이가 맞는지 확인
+print(xset)
+print(yset)
